@@ -6,14 +6,14 @@ import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Categories() {
+  const [selectedCategory, setSelectedCategory] = React.useState<string | null>(
+    null
+  );
   const trpc = useTRPC();
   const categories = useQuery(trpc.categories.getAll.queryOptions());
   if (!categories.data) {
     return <div>Loading categories...</div>;
   }
-  const [selectedCategory, setSelectedCategory] = React.useState<string | null>(
-    null
-  );
   return (
     <section className="px-4 sm:px-6 lg:px-8 mb-12">
       <div className="max-w-7xl mx-auto">

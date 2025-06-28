@@ -1,12 +1,10 @@
-
-
 import Categories from "@/components/Categories";
 import EventList from "@/components/EventList";
 import { Header } from "@/components/Header";
 import Hero from "@/components/Hero";
-import { getQueryClient, trpc } from "@/trpc/server";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-
+import {  HydrateClient, prefetch, trpc } from "@/trpc/server";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 const categories = [
   {
     id: "all",
@@ -165,20 +163,24 @@ const events = [
   },
 ];
 
-const queryClient = getQueryClient();
-void queryClient.prefetchQuery(trpc.categories.getAll.queryOptions());
+
+prefetch(trpc.categories.getAll.queryOptions());
+
 
 export default function HomePage() {
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <HydrateClient>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 transition-colors">
         <Header />
-        <Hero /> 
-
-        <Categories />
+        <Hero />
+        <ErrorBoundary fallback={<div>error</div>}>
+          <Suspense fallback={<div>Loading categories...</div>}>
+            <Categories />
+          </Suspense>
+        </ErrorBoundary>
 
         <EventList events={events} categories={categories} />
       </div>
-    </HydrationBoundary>
+    </HydrateClient>
   );
 }
