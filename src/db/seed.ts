@@ -1,92 +1,83 @@
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/neon-http";
 import { categoryTable, eventTable } from "./schema";
-import { Event } from "./types";
+import { faker } from "@faker-js/faker";
 
 const db = drizzle(process.env.DATABASE_URL!);
 
 async function main() {
   const categories = [
-    {
-      name: "Technology",
-    },
-    {
-      name: "Health",
-    },
-    {
-      name: "Finance",
-    },
-    {
-      name: "Education",
-    },
+    { name: "Technology" },
+    { name: "Health" },
+    { name: "Finance" },
+    { name: "Education" },
   ];
 
   const categoriesInDB = await db.select().from(categoryTable);
 
-  if (categoriesInDB.length > 0) {
+  if (categoriesInDB.length === 0) {
     await db.insert(categoryTable).values(categories);
-    console.log("New  categories added to the database!");
+    console.log("New categories added to the database!");
   }
 
-  await db.delete(eventTable);
+  // Get the latest categories after inserting (if needed)
+  const allCategories = await db.select().from(categoryTable);
 
-  const eventObject = {
-    categoryId: categoriesInDB[0].id,
-    slug: "React-Next-Developers-Meetup",
-    title: "React & Next.js Developers Meetup",
-    description:
-      "Join us for an evening of learning about the latest in React and Next.js development.",
-    fullDescription:
-      "Join us for an evening of learning about the latest in React and Next.js development. We'll have talks from industry experts and networking opportunities. This event is perfect for developers looking to enhance their skills and network with like-minded individuals.",
-    startDate: new Date("2024-02-15T18:00:00Z"),
-    endDate: new Date("2024-02-15T21:00:00Z"),
-    location: "Tech Hub, Downtown",
-    image: "/placeholder.svg?height=200&width=400",
-    startTime: "18:00",
-    endTime: "21:00",
-    maxMembers: 100,
-    price: 0,
-  };
-
-  const events: Omit<Event, "id" | "createdAt" | "updatedAt">[] = [
-    {
-      categoryId: categoriesInDB[0].id,
-      slug: "React-Next-Developers-Meetup",
-      title: "React & Next.js Developers Meetup",
-      description:
-        "Join us for an evening of learning about the latest in React and Next.js development.",
-      fullDescription:
-        "Join us for an evening of learning about the latest in React and Next.js development. We'll have talks from industry experts and networking opportunities. This event is perfect for developers looking to enhance their skills and network with like-minded individuals.",
-      startDate: new Date("2024-02-15T18:00:00Z"),
-      endDate: new Date("2024-02-15T21:00:00Z"),
-      location: "Tech Hub, Downtown",
-      image: "/placeholder.svg?height=200&width=400",
-      startTime: "18:00",
-      endTime: "21:00",
-      maxMembers: 100,
-      price: 0,
-    },
-    {
-      categoryId: categoriesInDB[0].id,
-      slug: "startup-pitch-night",
-      title: "Startup Pitch Night",
-      description:
-        "Watch innovative startups pitch their ideas to investors and fellow entrepreneurs. Great networking event for the business community.",
-      fullDescription:
-        "Join us for an evening of learning about the latest in React and Next.js development. We'll have talks from industry experts and networking opportunities. This event is perfect for developers looking to enhance their skills and network with like-minded individuals.",
-      startDate: new Date("2024-02-18T18:00:00Z"),
-      endDate: new Date("2024-02-19T21:00:00Z"),
-      location: "Central Park",
-      image: "/placeholder.svg?height=200&width=400",
-      startTime: "18:00",
-      endTime: "21:00",
-      maxMembers: 28,
-      price: 10,
-    },
-    ...Array(30).fill(eventObject),
-  ];
-
-  await db.insert(eventTable).values(events);
+  await generateRandomEvents(allCategories, 100);
+  console.log("Finished seeding successfully!");
 }
 
-main();
+main().catch((err) => console.error("Error seeding database:", err));
+
+async function generateRandomEvents(
+  categories: { id: string; name: string }[],
+  count: number
+) {
+  const existingEvents = await db.select().from(eventTable);
+  if (existingEvents.length > 0) {
+    await db.delete(eventTable);
+    console.log("Existing events deleted.");
+  }
+
+  if (categories.length === 0) {
+    console.error("No categories provided.");
+    return;
+  }
+
+  const events = [];
+  for (let i = 0; i < count; i++) {
+    const category = categories[Math.floor(Math.random() * categories.length)];
+
+    const startDate = faker.date.soon();
+    const endDate = faker.date.soon({ days: 5, refDate: startDate });
+
+    const startTimeObj = faker.date.between({
+      from: new Date(startDate.setHours(8, 0, 0, 0)), // starting from 8:00 AM
+      to: new Date(startDate.setHours(15, 0, 0, 0)), // up to 3:00 PM
+    });
+
+    const endTimeObj = faker.date.between({
+      from: new Date(startTimeObj.getTime() + 30 * 60 * 1000), // at least 30 mins after start
+      to: new Date(startDate.setHours(23, 0, 0, 0)), // up to 11:00 PM
+    });
+
+    events.push({
+      categoryId: category.id,
+      slug: faker.lorem.slug(),
+      title: faker.lorem.sentence(5),
+      description: faker.lorem.paragraph(3),
+      fullDescription: faker.lorem.paragraphs(5),
+      startDate: startDate,
+      endDate: endDate,
+      location: faker.location.streetAddress(),
+      image: faker.image.url(),
+      startTime: startTimeObj.toISOString().substring(11, 16), // "HH:MM"
+      endTime: endTimeObj.toISOString().substring(11, 16), // "HH:MM"
+      maxMembers: faker.number.int({ min: 10, max: 100 }),
+      price: faker.number.int({ min: 0, max: 100 }),
+    });
+  }
+
+  await db.insert(eventTable).values(events);
+  console.log(`${count} random events generated.`);
+}

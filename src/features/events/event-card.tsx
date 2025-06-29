@@ -22,44 +22,9 @@ const categories = [
 export default function EventCard({ event }: Props) {
   return (
     <Link href={`/event/${event.slug}`} className="group">
-      <Card className="overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-0 shadow-lg bg-white dark:bg-slate-800 cursor-pointer h-full">
-        <div className="relative h-64">
-          <Image
-            src={"/placeholder.jpg"}
-            alt={event.title}
-            fill
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="absolute top-4 left-4">
-            {/* todo fix badge color and name*/}
-            <Badge
-              className={`
-                ${categories[0].color} 
-                shadow-lg`}
-            >
-              {categories[0].name}
-            </Badge>
-          </div>
-          <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <Button
-              size="sm"
-              variant="secondary"
-              className="h-8 w-8 p-0 bg-white/90 hover:bg-white backdrop-blur-sm"
-              //   onClick={(e) => e.preventDefault()}
-            >
-              <Heart className="h-4 w-4" />
-            </Button>
-            <Button
-              size="sm"
-              variant="secondary"
-              className="h-8 w-8 p-0 bg-white/90 hover:bg-white backdrop-blur-sm"
-              //   onClick={(e) => e.preventDefault()}
-            >
-              <Share2 className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+      <Card className="overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-0 shadow-lg bg-white dark:bg-slate-800 cursor-pointer h-full pt-0">
+        <p>{event.id}</p>
+        <CardImage alt="Event Image" src={event.image || "/placeholder.jpg" } />
 
         <CardHeader className="pb-3">
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white line-clamp-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
@@ -126,3 +91,40 @@ export default function EventCard({ event }: Props) {
     </Link>
   );
 }
+
+const CardImage = ({ src, alt }: { src: string; alt: string }) => {
+  return (
+    <div className="relative h-64 ">
+      <Image src={src} alt={alt} fill className="object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute top-4 left-4">
+        {/* todo fix badge color and name*/}
+        <Badge
+          className={`
+          ${categories[0].color} 
+          shadow-lg`}
+        >
+          {categories[0].name}
+        </Badge>
+      </div>
+      <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <Button
+          size="sm"
+          variant="secondary"
+          className="h-8 w-8 p-0 bg-white/90 hover:bg-white backdrop-blur-sm"
+          //   onClick={(e) => e.preventDefault()}
+        >
+          <Heart className="h-4 w-4" />
+        </Button>
+        <Button
+          size="sm"
+          variant="secondary"
+          className="h-8 w-8 p-0 bg-white/90 hover:bg-white backdrop-blur-sm"
+          //   onClick={(e) => e.preventDefault()}
+        >
+          <Share2 className="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
+  );
+};

@@ -24,8 +24,10 @@ export default function EventsPList() {
     return <NoEventsFound />;
   }
 
+  
+
   return (
-    <section className="px-4 sm:px-6 lg:px-8 pb-20">
+    <section className="pb-20">
       <div className="max-w-7xl mx-auto">
         <InfiniteScroll
           onLoadMore={events.fetchNextPage}

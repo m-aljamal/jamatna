@@ -22,6 +22,11 @@ export const eventRouter = createTRPCRouter({
         .orderBy(desc(eventTable.startDate))
         .limit(limit)
         .offset(cursor);
+
+      events.forEach((event) => {
+        console.log(event.id);
+      });
+
       return {
         events,
         nextCursor: events.length === limit ? cursor + limit : undefined,

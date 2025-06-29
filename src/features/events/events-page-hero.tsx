@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+ import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -10,49 +9,49 @@ import {
 import { ArrowLeft, Search } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import CategoriesSection from "../categories/categories-section";
 
 const categories = [
-    {
-      id: "all",
-      name: "All Events",
-      color: "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200",
-    },
-    {
-      id: "tech",
-      name: "Technology",
-      color:
-        "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200",
-    },
-    {
-      id: "business",
-      name: "Business",
-      color:
-        "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
-    },
-    {
-      id: "health",
-      name: "Health & Wellness",
-      color: "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200",
-    },
-    {
-      id: "arts",
-      name: "Arts & Culture",
-      color:
-        "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
-    },
-    {
-      id: "sports",
-      name: "Sports",
-      color: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200",
-    },
-    {
-      id: "food",
-      name: "Food & Drink",
-      color: "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200",
-    },
-  ];
+  {
+    id: "all",
+    name: "All Events",
+    color: "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200",
+  },
+  {
+    id: "tech",
+    name: "Technology",
+    color:
+      "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200",
+  },
+  {
+    id: "business",
+    name: "Business",
+    color:
+      "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+  },
+  {
+    id: "health",
+    name: "Health & Wellness",
+    color: "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200",
+  },
+  {
+    id: "arts",
+    name: "Arts & Culture",
+    color:
+      "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+  },
+  {
+    id: "sports",
+    name: "Sports",
+    color: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200",
+  },
+  {
+    id: "food",
+    name: "Food & Drink",
+    color: "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200",
+  },
+];
 export default function EventsPageHero() {
-      
   return (
     <section className="relative py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -140,26 +139,7 @@ export default function EventsPageHero() {
         </div>
 
         {/* Categories Pills */}
-        <div className="flex flex-wrap gap-3 justify-center mb-8">
-          {categories.map((category) => (
-            <Button
-              key={category.id}
-              variant={
-                //   selectedCategory === category.id
-                true ? "default" : "outline"
-              }
-              // onClick={() => setSelectedCategory(category.id)}
-              className={`rounded-full px-6 py-2 transition-all ${
-                //   selectedCategory === category.id
-                true
-                  ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg"
-                  : "hover:bg-emerald-50 dark:hover:bg-emerald-950 hover:border-emerald-300 dark:hover:border-emerald-700"
-              }`}
-            >
-              {category.name}
-            </Button>
-          ))}
-        </div>
+        <CategoriesSection />
       </div>
     </section>
   );
