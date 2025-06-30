@@ -5,16 +5,14 @@ import {
   varchar,
   time,
   integer,
+  serial,
 } from "drizzle-orm/pg-core";
-import { nanoid } from "nanoid";
 import { categoryTable } from "../category/models";
 
 export const eventTable = pgTable("event", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => nanoid()),
+  id: serial('id').primaryKey(),
   slug: varchar("slug", { length: 255 }).notNull(),
-  categoryId: text("category_id")
+  categoryId: serial("category_id")
     .notNull()
     .references(() => categoryTable.id, { onDelete: "cascade" }),
   title: varchar("title", { length: 255 }).notNull(),
@@ -28,6 +26,6 @@ export const eventTable = pgTable("event", {
   endTime: time("end_time").notNull(),
   maxMembers: integer("max_members").notNull(),
   price: integer("price").notNull().default(0),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1750953148686,
-      "tag": "0000_luxuriant_sauron",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1750954603146,
-      "tag": "0001_sturdy_sugar_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1750957273606,
-      "tag": "0002_fearless_loki",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1750958666865,
-      "tag": "0003_youthful_johnny_blaze",
+      "when": 1751200718426,
+      "tag": "0000_wooden_vertigo",
       "breakpoints": true
     }
   ]

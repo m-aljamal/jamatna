@@ -23,8 +23,7 @@ export default function EventCard({ event }: Props) {
   return (
     <Link href={`/event/${event.slug}`} className="group">
       <Card className="overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-0 shadow-lg bg-white dark:bg-slate-800 cursor-pointer h-full pt-0">
-        <p>{event.id}</p>
-        <CardImage alt="Event Image" src={event.image || "/placeholder.jpg" } />
+        <CardImage alt="Event Image" src={event.image || "/placeholder.jpg"} />
 
         <CardHeader className="pb-3">
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white line-clamp-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">

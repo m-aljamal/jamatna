@@ -30,7 +30,7 @@ async function main() {
 main().catch((err) => console.error("Error seeding database:", err));
 
 async function generateRandomEvents(
-  categories: { id: string; name: string }[],
+  categories: { id: number; name: string }[],
   count: number
 ) {
   const existingEvents = await db.select().from(eventTable);

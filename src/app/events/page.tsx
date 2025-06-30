@@ -1,10 +1,21 @@
 import { Header } from "@/components/Header";
 import EventsPageHero from "@/features/events/events-page-hero";
 import EventsSection from "@/features/events/events-section";
+import { searchParamsCache } from "@/features/filters/searchParams";
 import { HydrateClient, prefetch, trpc } from "@/trpc/server";
+import { SearchParams } from "nuqs/server";
 
-export default function EventsPage() {
-  prefetch(trpc.events.getAll.infiniteQueryOptions({}));
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+export default async function EventsPage({ searchParams }: PageProps) {
+  await searchParamsCache.parse(searchParams);
+  prefetch(
+    trpc.events.getAll.infiniteQueryOptions({
+      limit: 10,
+    })
+  );
   prefetch(trpc.categories.getAll.queryOptions());
 
   return (

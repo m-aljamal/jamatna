@@ -1,2 +1,0 @@
-ALTER TABLE "event" ADD COLUMN "category_id" text NOT NULL;--> statement-breakpoint
-ALTER TABLE "event" ADD CONSTRAINT "event_category_id_category_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."category"("id") ON DELETE cascade ON UPDATE no action;

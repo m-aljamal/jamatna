@@ -11,7 +11,7 @@ export default function EventsPList() {
   const trpc = useTRPC();
   const events = useSuspenseInfiniteQuery(
     trpc.events.getAll.infiniteQueryOptions(
-      {},
+      { limit: 10 },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
       }
@@ -23,8 +23,6 @@ export default function EventsPList() {
   if (data.length === 0) {
     return <NoEventsFound />;
   }
-
-  
 
   return (
     <section className="pb-20">

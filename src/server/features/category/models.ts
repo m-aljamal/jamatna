@@ -1,10 +1,7 @@
-import { pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
-import { nanoid } from "nanoid";
+import { pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
 
 export const categoryTable = pgTable("category", {
-    id: text("id")
-    .primaryKey()
-    .$defaultFn(() => nanoid()),
+  id: serial("id").primaryKey(),
   name: varchar({ length: 255 }).notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
