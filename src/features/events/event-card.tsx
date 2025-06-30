@@ -19,11 +19,11 @@ const categories = [
   { id: "4", name: "Education", color: "bg-purple-100 text-purple-800" },
 ];
 
-export default function EventCard({ event }: Props) {
+export default function EventCard({ event, category }: Props) {
   return (
     <Link href={`/event/${event.slug}`} className="group">
       <Card className="overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-0 shadow-lg bg-white dark:bg-slate-800 cursor-pointer h-full pt-0">
-        <CardImage alt="Event Image" src={event.image || "/placeholder.jpg"} />
+        <CardImage alt="Event Image" src={event.image || "/placeholder.jpg"} category={category?.name} />
 
         <CardHeader className="pb-3">
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white line-clamp-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
@@ -91,7 +91,7 @@ export default function EventCard({ event }: Props) {
   );
 }
 
-const CardImage = ({ src, alt }: { src: string; alt: string }) => {
+const CardImage = ({ src, alt, category }: { src: string; alt: string; category: any }) => {
   return (
     <div className="relative h-64 ">
       <Image src={src} alt={alt} fill className="object-cover" />
@@ -103,7 +103,7 @@ const CardImage = ({ src, alt }: { src: string; alt: string }) => {
           ${categories[0].color} 
           shadow-lg`}
         >
-          {categories[0].name}
+          {category}
         </Badge>
       </div>
       <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

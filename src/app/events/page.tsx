@@ -4,15 +4,18 @@ import EventsSection from "@/features/events/events-section";
 import { searchParamsCache } from "@/features/filters/searchParams";
 import { HydrateClient, prefetch, trpc } from "@/trpc/server";
 import { SearchParams } from "nuqs/server";
-
 type PageProps = {
   searchParams: Promise<SearchParams>;
 };
 
 export default async function EventsPage({ searchParams }: PageProps) {
   await searchParamsCache.parse(searchParams);
+
+  const { category } = searchParamsCache.all();
+
   prefetch(
     trpc.events.getAll.infiniteQueryOptions({
+      category: category ?? null,
       limit: 10,
     })
   );
