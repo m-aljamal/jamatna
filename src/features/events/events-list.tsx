@@ -6,17 +6,18 @@ import { Calendar } from "lucide-react";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import InfiniteScroll from "@/lib/InfinitScroll";
-import { useQueryState } from "nuqs";
+import { useQueryStates } from "nuqs";
+import { searchParams } from "../filters/searchParams";
 
 export default function EventsPList() {
-  const [category] = useQueryState("category", {
+  const [{ category, search }] = useQueryStates(searchParams, {
     shallow: false,
   });
 
   const trpc = useTRPC();
   const events = useSuspenseInfiniteQuery(
     trpc.events.getAll.infiniteQueryOptions(
-      { limit: 10, category: category ?? null },
+      { limit: 10, category: category ?? null, search: search ?? null },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
       }
@@ -39,11 +40,7 @@ export default function EventsPList() {
         >
           <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {data.map((event) => (
-              <EventCard
-                category={event.category}
-                event={event.event}
-                key={event.event.id}
-              />
+              <EventCard event={event} key={event.id} />
             ))}
           </div>
         </InfiniteScroll>

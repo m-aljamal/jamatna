@@ -11,11 +11,12 @@ type PageProps = {
 export default async function EventsPage({ searchParams }: PageProps) {
   await searchParamsCache.parse(searchParams);
 
-  const { category } = searchParamsCache.all();
+  const { category, search } = searchParamsCache.all();
 
   prefetch(
     trpc.events.getAll.infiniteQueryOptions({
       category: category ?? null,
+      search: search ?? null,
       limit: 10,
     })
   );

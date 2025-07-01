@@ -1,4 +1,6 @@
- import { Input } from "@/components/ui/input";
+"use client";
+
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -10,48 +12,13 @@ import { ArrowLeft, Search } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import CategoriesSection from "../categories/categories-section";
+import { useQueryState } from "nuqs";
 
-const categories = [
-  {
-    id: "all",
-    name: "All Events",
-    color: "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200",
-  },
-  {
-    id: "tech",
-    name: "Technology",
-    color:
-      "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200",
-  },
-  {
-    id: "business",
-    name: "Business",
-    color:
-      "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
-  },
-  {
-    id: "health",
-    name: "Health & Wellness",
-    color: "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200",
-  },
-  {
-    id: "arts",
-    name: "Arts & Culture",
-    color:
-      "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
-  },
-  {
-    id: "sports",
-    name: "Sports",
-    color: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200",
-  },
-  {
-    id: "food",
-    name: "Food & Drink",
-    color: "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200",
-  },
-];
 export default function EventsPageHero() {
+  const [searchQuery, setSearchQuery] = useQueryState("search", {
+    shallow: false,
+  });
+
   return (
     <section className="relative py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -85,16 +52,16 @@ export default function EventsPageHero() {
               <Input
                 type="text"
                 placeholder="Search events..."
-                //   value={searchQuery}
-                //   onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchQuery || ""}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500"
               />
             </div>
 
             {/* Category Filter */}
-            <Select
-            // value={selectedCategory}
-            // onValueChange={setSelectedCategory}
+            {/* <Select
+            value={selectedCategory}
+            onValueChange={setSelectedCategory}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Category" />
@@ -106,7 +73,7 @@ export default function EventsPageHero() {
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </Select> */}
 
             {/* Price Filter */}
             <Select
