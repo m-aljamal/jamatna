@@ -9,7 +9,7 @@ import InfiniteScroll from "@/lib/InfinitScroll";
 import { useQueryStates } from "nuqs";
 import { searchParams } from "../filters/searchParams";
 
-export default function EventsPList() {
+export default function EventList() {
   const [{ category, search }] = useQueryStates(searchParams, {
     shallow: false,
   });
@@ -38,7 +38,7 @@ export default function EventsPList() {
           hasMore={events.hasNextPage}
           loading={events.isFetchingNextPage}
         >
-          <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {data.map((event) => (
               <EventCard event={event} key={event.id} />
             ))}
