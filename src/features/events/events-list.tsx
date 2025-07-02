@@ -10,14 +10,20 @@ import { useQueryStates } from "nuqs";
 import { searchParams } from "../filters/searchParams";
 
 export default function EventList() {
-  const [{ category, search }] = useQueryStates(searchParams, {
+  const [{ category, search, price, sort }] = useQueryStates(searchParams, {
     shallow: false,
   });
 
   const trpc = useTRPC();
   const events = useSuspenseInfiniteQuery(
     trpc.events.getAll.infiniteQueryOptions(
-      { limit: 10, category: category ?? null, search: search ?? null },
+      {
+        limit: 10,
+        category: category ?? null,
+        search: search ?? null,
+        price,
+        sortBy: sort,
+      },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
       }

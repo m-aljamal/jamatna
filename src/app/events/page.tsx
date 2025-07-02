@@ -1,10 +1,13 @@
 import { Header } from "@/components/Header";
 import EventsDetails from "@/features/events/events-details";
 import EventList from "@/features/events/events-list";
+import EventSkeleton from "@/features/events/skeleton";
 import { FilterSidebar } from "@/features/filters/filterSidebar";
 import { searchParamsCache } from "@/features/filters/searchParams";
 import { HydrateClient, prefetch, trpc } from "@/trpc/server";
 import { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 type PageProps = {
   searchParams: Promise<SearchParams>;
@@ -13,12 +16,14 @@ type PageProps = {
 export default async function EventsPage({ searchParams }: PageProps) {
   await searchParamsCache.parse(searchParams);
 
-  const { category, search } = searchParamsCache.all();
+  const { category, search, price, sort } = searchParamsCache.all();
 
   prefetch(
     trpc.events.getAll.infiniteQueryOptions({
       category: category ?? null,
       search: search ?? null,
+      price,
+      sortBy: sort,
       limit: 10,
     })
   );
@@ -34,7 +39,11 @@ export default async function EventsPage({ searchParams }: PageProps) {
 
             <main className="flex-1 min-w-0">
               <EventsDetails />
-              <EventList />
+              <ErrorBoundary fallback={<div>Error loading events</div>}>
+                <Suspense fallback={<EventSkeleton />}>
+                  <EventList />
+                </Suspense>
+              </ErrorBoundary>
             </main>
           </HydrateClient>
         </div>
