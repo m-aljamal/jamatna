@@ -87,4 +87,20 @@ export const eventRouter = createTRPCRouter({
 
       return result;
     }),
+  getBySlug: baseProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(async ({ input }) => {
+      const { slug } = input;
+
+      const [event] = await db
+        .select({
+          ...getTableColumns(eventTable),
+          categoryName: categoryTable.name,
+        })
+        .from(eventTable)
+        .where(eq(eventTable.slug, slug))
+        .leftJoin(categoryTable, eq(categoryTable.id, eventTable.categoryId));
+
+      return event;
+    }),
 });

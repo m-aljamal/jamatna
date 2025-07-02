@@ -12,12 +12,18 @@ interface Props {
   event: EventWithDetails;
 }
 
-const categories = [
-  { id: "1", name: "Technology", color: "bg-blue-100 text-blue-800" },
-  { id: "2", name: "Health", color: "bg-green-100 text-green-800" },
-  { id: "3", name: "Finance", color: "bg-yellow-100 text-yellow-800" },
-  { id: "4", name: "Education", color: "bg-purple-100 text-purple-800" },
-];
+const colors = {
+  Technology: "bg-blue-100 text-blue-800",
+  Health: "bg-green-100 text-green-800",
+  Finance: "bg-yellow-100 text-yellow-800",
+  Education: "bg-purple-100 text-purple-800",
+  Sports: "bg-red-100 text-red-800",
+  Music: "bg-pink-100 text-pink-800",
+  Art: "bg-orange-100 text-orange-800",
+  Food: "bg-teal-100 text-teal-800",
+  Travel: "bg-indigo-100 text-indigo-800",
+  Other: "bg-gray-100 text-gray-800",
+};
 
 export default function EventCard({ event }: Props) {
   return (
@@ -109,10 +115,9 @@ const CardImage = ({
       <Image src={src} alt={alt} fill className="object-cover" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <div className="absolute top-4 left-4">
-        {/* todo fix badge color and name*/}
         <Badge
           className={`
-          ${categories[0].color} 
+          ${colors[category as keyof typeof colors]} 
           shadow-lg`}
         >
           {category}
