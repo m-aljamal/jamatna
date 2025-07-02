@@ -2,8 +2,29 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Filter } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { searchParamsCache } from "../filters/searchParams";
+import { caller } from "@/trpc/server";
 
-export default function EventsDetails() {
+export default async function EventsDetails() {
+  const { category, search, price } = searchParamsCache.all();
+  const dataCount = await caller.events.getCount({
+    category,
+    search,
+    price,
+  });
+
+  let eventsTitle = "All Events";
+
+  if (category) {
+    eventsTitle = category;
+  }
+  if (search) {
+    eventsTitle = `Events with ${search} title`;
+  }
+  if (price !== "all") {
+    eventsTitle = `Events With ${price} price`;
+  }
+
   return (
     <>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
@@ -29,13 +50,10 @@ export default function EventsDetails() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-            {/* {category === "all"
-                    ? "All Events"
-                    : categories.find((c) => c.id === selectedCategory)?.name} */}
+            {eventsTitle}
           </h2>
           <Badge variant="secondary" className="text-sm">
-            {4} events
-            {/* {sortedEvents.length} events */}
+            {dataCount.count} events
           </Badge>
         </div>
 

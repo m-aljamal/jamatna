@@ -4,7 +4,7 @@ import { eventTable } from "./models";
 import { z } from "zod";
 import { DEFAULT_DATA_LIMIT } from "@/lib/constants";
 import { categoryTable } from "../category/models";
-import { and, desc, eq, getTableColumns, gt, ilike } from "drizzle-orm";
+import { and, count, desc, eq, getTableColumns, gt, ilike } from "drizzle-orm";
 import { priceOptions, sortOptions } from "@/features/filters/searchParams";
 
 export const eventRouter = createTRPCRouter({
@@ -47,7 +47,8 @@ export const eventRouter = createTRPCRouter({
               : input.sortBy === "price"
               ? eventTable.price
               : eventTable.updatedAt
-          )
+          ),
+          desc(eventTable.id)
         )
         .leftJoin(categoryTable, eq(categoryTable.id, eventTable.categoryId))
         .limit(limit)
@@ -57,5 +58,33 @@ export const eventRouter = createTRPCRouter({
         events,
         nextCursor: events.length === limit ? cursor + limit : undefined,
       };
+    }),
+  getCount: baseProcedure
+    .input(
+      z.object({
+        category: z.string().nullable().optional(),
+        search: z.string().nullable().optional(),
+        price: z.enum(priceOptions).optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const { category, price, search } = input;
+
+      const whereClauses = [
+        category ? ilike(categoryTable.name, `%${category}%`) : undefined,
+        search ? ilike(eventTable.title, `%${search}%`) : undefined,
+        price === "free" ? eq(eventTable.price, 0) : undefined,
+        price === "paid" ? gt(eventTable.price, 0) : undefined,
+      ].filter(Boolean);
+
+      const [result] = await db
+        .select({
+          count: count(),
+        })
+        .from(eventTable)
+        .where(and(...whereClauses))
+        .leftJoin(categoryTable, eq(categoryTable.id, eventTable.categoryId));
+
+      return result;
     }),
 });

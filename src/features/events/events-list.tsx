@@ -31,7 +31,7 @@ export default function EventList() {
   );
 
   const data = events.data.pages.flatMap((page) => page.events);
-
+ 
   if (data.length === 0) {
     return <NoEventsFound />;
   }

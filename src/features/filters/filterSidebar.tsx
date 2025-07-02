@@ -12,10 +12,13 @@ import SearchFilter from "./search-filter";
 import { searchParams } from "./searchParams";
 import Sort from "./sort";
 
-const Filters = () => {
-  const [filters, setFilters] = useQueryStates(searchParams, {
-    shallow: false,
-  });
+export const FilterSidebar = () => {
+  const [{ category, price, search, sort }, setFilters] = useQueryStates(
+    searchParams,
+    {
+      shallow: false,
+    }
+  );
 
   const onClearFilters = () => {
     setFilters({
@@ -25,39 +28,7 @@ const Filters = () => {
       sort: "date",
     });
   };
-
-  return (
-    <div className="space-y-6">
-      <SearchFilter />
-
-      <Separator />
-
-      <CategoryFilter />
-
-      <Separator />
-
-      <PriceFilter />
-
-      <Separator />
-
-      <Sort />
-
-      <Separator />
-      {filters.category || filters.price !== "all" || filters.search ? (
-        <Button
-          variant="outline"
-          onClick={onClearFilters}
-          className="w-full bg-transparent"
-        >
-          <X className="h-4 w-4 mr-2" />
-          Clear All Filters
-        </Button>
-      ) : null}
-    </div>
-  );
-};
-
-export function FilterSidebar() {
+  const isActive = category || price !== "all" || sort !== "date" || search;
   return (
     <aside className="hidden lg:block w-70 flex-shrink-0">
       <div className="sticky top-24 ">
@@ -66,7 +37,7 @@ export function FilterSidebar() {
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
               Filters
             </h2>
-            {true && (
+            {isActive && (
               <Badge
                 variant="secondary"
                 className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200"
@@ -75,9 +46,35 @@ export function FilterSidebar() {
               </Badge>
             )}
           </div>
-          <Filters />
+
+          <div className="space-y-6">
+            <SearchFilter />
+
+            <Separator />
+
+            <CategoryFilter />
+
+            <Separator />
+
+            <PriceFilter />
+
+            <Separator />
+
+            <Sort />
+
+            <Separator />
+
+            <Button
+              variant="outline"
+              onClick={onClearFilters}
+              className="w-full bg-transparent"
+            >
+              <X className="h-4 w-4 mr-2" />
+              Clear All Filters
+            </Button>
+          </div>
         </Card>
       </div>
     </aside>
   );
-}
+};
