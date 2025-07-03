@@ -103,4 +103,17 @@ export const eventRouter = createTRPCRouter({
 
       return event;
     }),
+  getLatest: baseProcedure.query(async () => {
+    const events = await db
+      .select({
+        ...getTableColumns(eventTable),
+        categoryName: categoryTable.name,
+      })
+      .from(eventTable)
+      .leftJoin(categoryTable, eq(categoryTable.id, eventTable.categoryId))
+      .orderBy(desc(eventTable.createdAt))
+      .limit(6);
+
+    return events;
+  }),
 });

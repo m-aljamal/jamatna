@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Plus, Globe, Shield, Star, Zap } from "lucide-react";
+import { Search, Globe, Shield, Star, Zap } from "lucide-react";
+import Link from "next/link";
 
 export default function Hero() {
-
   return (
     <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background Elements */}
@@ -66,7 +66,8 @@ export default function Hero() {
                 placeholder="Search events, topics, or locations..."
                 // value={searchQuery}
                 // onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-14 pr-6 py-4 text-lg rounded-2xl border-2 border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500 bg-white dark:bg-slate-800 shadow-lg"
+                className="pl-14 pr-6 py-4 text-lg rounded-2xl border-2 border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-
+                500 bg-white dark:bg-slate-800 shadow-lg"
               />
             </div>
           </div>
@@ -74,11 +75,14 @@ export default function Hero() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button
+              asChild
               size="lg"
               className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200"
             >
-              <Search className="mr-2 h-5 w-5" />
-              Explore Events
+              <Link href="/events">
+                <Search className="mr-2 h-5 w-5" />
+                Explore Events
+              </Link>
             </Button>
 
             {/* {isSignedIn && (

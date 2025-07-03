@@ -96,11 +96,14 @@ export function Header() {
               </DropdownMenu>
             ) : (
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" onClick={() => setIsSignedIn(true)}>
-                  Sign In
+                <Button variant="ghost" asChild>
+                  <Link href="/login">Sign In</Link>
                 </Button>
-                <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700">
-                  Sign Up
+                <Button
+                  asChild
+                  className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+                >
+                  <Link href="/signup">Sign Up</Link>
                 </Button>
               </div>
             )}
